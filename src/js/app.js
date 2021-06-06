@@ -1,5 +1,13 @@
 let pagina = 1;
 
+const cita = {
+    nombre = '',
+    fecha = '',
+    hora = '',
+    servicios: []
+}
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     iniciarApp()
@@ -13,11 +21,37 @@ function iniciarApp() {
 
     //oculta o muestra seccion segun el tab que presiono
     cambiarSeccion();
+
+    //paginacion siguiente y anterior
+    paginaSiguiente();
+
+    paginaAnterior();
+
+    //validacion paginacion, y botones
+    botonesPaginacion();
+
+
+    //Muestra el recumen de la cita o error
+    mostrarResumen();
 }
 
 function mostrarSeccion() {
+
+    //eliminar mostrar-seccion de la anterior
+    const seccionAnterior = document.querySelector('.mostrar-seccion')
+    if (seccionAnterior) {
+        seccionAnterior.classList.remove('mostrar-seccion');
+    }
+
+    //Agrega mostrar-seccion donde dimos click
     const seccionActual = document.querySelector(`#paso-${pagina}`);
     seccionActual.classList.add('mostrar-seccion');
+
+    //Eliminar la clase de actual en el tab anterior
+    const tabAnterior = document.querySelector('.tabs .actual');
+    if (tabAnterior) {
+        tabAnterior.classList.remove('actual');
+    }
 
     //resalta el tab actual
     const tab = document.querySelector(`[data-paso="${pagina}"]`);
@@ -34,24 +68,8 @@ function cambiarSeccion() {
         enlace.addEventListener('click', e => {
             e.preventDefault();
             pagina = parseInt(e.target.dataset.paso);
-            console.log(pagina);
-
-            //eliminar mostrar-seccion de la anterior
-            document.querySelector('.mostrar-seccion').classList.remove('mostrar-seccion');
-
-
-            //Agrega mostrar-seccion donde dimos click
-            const seccion = document.querySelector(`#paso-${pagina}`);
-            seccion.classList.add('mostrar-seccion');
-
-
-            //Eliminar la clase de actual en el tab anterior
-            document.querySelector('.tabs .actual').classList.remove('actual');
-
-
-            //agregar la calse de actual en el nuevo tab
-            const tab = document.querySelector(`[data-paso="${pagina}"]`);
-            tab.classList.add('actual');
+            mostrarSeccion();
+            botonesPaginacion();
         });
     });
 
@@ -132,5 +150,73 @@ function seleccionarServicio(e) {
         elemento.classList.add('seleccionado');
 
     }
+
+}
+
+function paginaSiguiente() {
+    const paginaSiguiente = document.querySelector('#siguiente');
+    paginaSiguiente.addEventListener('click', () => {
+        pagina++;
+        console.log(pagina);
+        botonesPaginacion();
+
+    });
+}
+
+function paginaAnterior() {
+    const paginaAnterior = document.querySelector('#anterior');
+    paginaAnterior.addEventListener('click', () => {
+        pagina--;
+        console.log(pagina);
+        botonesPaginacion();
+    });
+}
+
+function botonesPaginacion() {
+    const paginaSiguiente = document.querySelector('#siguiente');
+    const paginaAnterior = document.querySelector('#anterior');
+
+    if (pagina === 1) {
+        paginaAnterior.classList.add('ocultar');
+        paginaSiguiente.classList.remove('ocultar');
+
+    } else if (pagina == 2) {
+        paginaAnterior.classList.remove('ocultar');
+        paginaSiguiente.classList.remove('ocultar');
+    } else {
+        paginaSiguiente.classList.add('ocultar');
+        paginaAnterior.classList.remove('ocultar');
+
+
+    }
+    mostrarSeccion();
+
+}
+
+function mostrarResumen() {
+    //Destucturing
+    const {
+        nombre,
+        fecha,
+        gora,
+        servicios
+    } = cita;
+
+    //seleccionar resumen
+    const resumenDiv = document.querySelector('.contenido-resumen');
+
+
+    //validacion
+
+    if (Object.values(cita).includes('')) {
+        const noServicios = document.createElement('P');
+        noServicios.textContent = 'Faltan datos';
+        noServicios.classList.add('invalidar-cita');
+
+        //agrefar a resumenDiv
+        resumenDiv.appendChild(noServicios);
+
+    }
+
 
 }
