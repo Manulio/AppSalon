@@ -269,6 +269,9 @@ function mostrarResumen() {
     }
     //Mostrar el Resumen
 
+    const headingCita = document.createElement('H3');
+    headingCita.textContent = `Resumen de la Cita`;
+
     const nombreCita = document.createElement('P');
     nombreCita.innerHTML = `<span>Nombre:</span> ${nombre}`;
 
@@ -278,9 +281,16 @@ function mostrarResumen() {
     const horaCita = document.createElement('P');
     horaCita.innerHTML = `<span>Hora:</span> ${hora}`;
 
+    const headingServicios = document.createElement('H3');
+    headingServicios.textContent = `Resumen de Servicios`;
 
     const serviciosCita = document.createElement('DIV');
     serviciosCita.classList.add('resumen-servicios');
+
+    serviciosCita.appendChild(headingServicios);
+
+    let cantidad = 0;
+
 
     //iterar sobre array servicios
     servicios.forEach(servicio => {
@@ -296,28 +306,28 @@ function mostrarResumen() {
         textoServicio.textContent = nombre;
         const precioServicio = document.createElement('P');
         precioServicio.textContent = precio;
-        precioServicio.classList.add('precio')
+        precioServicio.classList.add('precio');
+
+        const precioTotal = precio.split('$');
+        cantidad += parseInt(precioTotal[1].trim());
 
         //colocar texto y precio en el div
-        contenedorServicio.appendChild(textoServicio);
-        contenedorServicio.appendChild(precioServicio);
-
 
         serviciosCita.appendChild(contenedorServicio);
-
-    })
-
-
-
+        contenedorServicio.appendChild(textoServicio);
+        contenedorServicio.appendChild(precioServicio);
+    });
+    resumenDiv.appendChild(headingCita);
     resumenDiv.appendChild(nombreCita);
     resumenDiv.appendChild(fechaCita);
     resumenDiv.appendChild(horaCita);
-
     resumenDiv.appendChild(serviciosCita);
 
 
-
-
+    const cantidadPagar = document.createElement('P');
+    cantidadPagar.innerHTML = `<span>Total:</span> $${cantidad}`;
+    cantidadPagar.classList.add("total")
+    resumenDiv.appendChild(cantidadPagar);
 }
 
 function nombreCita() {
@@ -404,13 +414,14 @@ function horaCita() {
     inputHora.addEventListener('input', (e) => {
         const horaCita = e.target.value;
         const hora = horaCita.split(':');
-        if (hora[0] < 10 || hora[0] > 18) {
-            mostrarAlerta('Hora no valida', 'error');
+        if (hora[0] <= 10 || hora[0] >= 18) {
+             mostrarAlerta('Hora no valida', 'error');
             setTimeout(() => {
-                inputHora.value = '';
+               mostrarAlerta.remove();
 
             }, 3000)
         } else {
+            mostrarAlerta.remove();
             cita.hora = horaCita;
         }
     })

@@ -1,4 +1,5 @@
 .listado-servicios {
+    overflow-y: scroll;
     @include tablet {
         @include grid(2, $separacion/4)
     }
@@ -9,34 +10,27 @@
     background-color: $blanco;
     padding: $separacion / 4;
     border-radius: 1rem;
-
     @include tablet {
         margin-bottom: 0;
     }
-
     p {
         margin: 0 0 $separacion / 4 0;
     }
-
     .nombre-servicio {
         color: $negro;
     }
-
     .precio-servicio {
         color: $azul;
         margin: 0;
         font-size: 3rem;
         font-weight: $bold;
     }
-
     &.seleccionado {
         background-color: $azul;
-
         p {
             color: $blanco;
         }
     }
-
     &:hover {
         cursor: pointer;
     }
