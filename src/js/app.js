@@ -1,3 +1,6 @@
+
+
+
 let pagina = 1;
 
 const cita = {
@@ -92,16 +95,17 @@ function cambiarSeccion() {
 
 async function mostrarServicios() {
     try {
-        const resultado = await fetch('./servicios.json');
+        const url = "http://127.0.0.1:3000/servicios.php";
+        const resultado = await fetch(url);
 
         const db = await resultado.json();
-
-        const servicios = db.servicios;
+        
+        
 
 
         //generar HTML
 
-        servicios.forEach(servicio => {
+        db.forEach(servicio => {
             const {
                 id,
                 nombre,
